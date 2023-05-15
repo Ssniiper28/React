@@ -7,12 +7,17 @@ import { checkWinnerFrom } from './logic/board'
 import { Winner } from './components/Winner'
 
 function App () {
+  const checkEndGame = (newBoard) => {
+    return newBoard.every((square) => square !== null)
+  }
   // variables
   const [board, setBoard] = useState(() => {
     const boardFromStorage = window.localStorage.getItem('board')
-    return boardFromStorage
-      ? JSON.parse(boardFromStorage)
-      : Array(9).fill(null)
+    if (boardFromStorage) {
+      return JSON.parse(boardFromStorage)
+    } else {
+      return Array(9).fill(null)
+    }
   })
   const [turn, setTurn] = useState(() => {
     const turnFromStorage = window.localStorage.getItem('turn')
@@ -28,10 +33,6 @@ function App () {
 
     window.localStorage.removeItem('board')
     window.localStorage.removeItem('turn')
-  }
-
-  const checkEndGame = (newBoard) => {
-    return newBoard.every((square) => square !== null)
   }
 
   const updateBoard = (index) => {
@@ -56,6 +57,7 @@ function App () {
   return (
     <main className='board'>
       <h1>Tic Tac Toe</h1>
+      <button onClick={resetGame}>Reset</button>
       <section className='game'>
         {
           board.map((square, index) => {
